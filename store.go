@@ -87,6 +87,7 @@ type Repo struct {
 	Issues        map[int]*Issue
 	Pulls         map[int]*PullRequest
 	Labels        map[string]*Label
+	LabelOrder    []string
 	NextNumber    int
 	NextCommentID int
 	CreatedAt     string
@@ -416,6 +417,7 @@ type Store struct {
 	mu              sync.Mutex
 	objects         map[string]*gitObject
 	repos           map[string]*Repo
+	repoOrder       []*Repo
 	nextRepoID      int
 	commitSeq       int
 	issueSeq        int
@@ -459,6 +461,7 @@ func (s *Store) createRepo(owner, name string, isPrivate bool, description strin
 	}
 	s.nextRepoID++
 	s.repos[repoKey(owner, name)] = repo
+	s.repoOrder = append(s.repoOrder, repo)
 	return repo
 }
 
@@ -470,10 +473,13 @@ func (s *Store) deleteRepo(owner, name string) bool {
 	return ok
 }
 
+// listRepos returns the owner's repositories in creation order (insertion
+// order matters: the pagination check walks pages and requires no repeats
+// and no misses, so the order must be stable across requests).
 func (s *Store) listRepos(owner string) []*Repo {
 	var out []*Repo
-	for _, r := range s.repos {
-		if r.Owner == owner {
+	for _, r := range s.repoOrder {
+		if r.Owner == owner && s.repos[repoKey(r.Owner, r.Name)] == r {
 			out = append(out, r)
 		}
 	}

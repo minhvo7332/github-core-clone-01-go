@@ -848,6 +848,9 @@ func init() {
 		if c, ok := body["color"].(string); ok {
 			color = c
 		}
+		if _, exists := repo.Labels[name]; !exists {
+			repo.LabelOrder = append(repo.LabelOrder, name)
+		}
 		repo.Labels[name] = &Label{Name: name, Color: color}
 		jsonReply(ctx.res, 201, labelOut{Name: name, Color: color, Description: ""}, nil)
 	})
@@ -857,7 +860,11 @@ func init() {
 			return
 		}
 		out := []labelOut{}
-		for _, l := range repo.Labels {
+		for _, name := range repo.LabelOrder {
+			l := repo.Labels[name]
+			if l == nil {
+				continue
+			}
 			out = append(out, labelOut{Name: l.Name, Color: l.Color, Description: ""})
 		}
 		jsonReply(ctx.res, 200, out, nil)
