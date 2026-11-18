@@ -44,36 +44,36 @@ type Comment struct {
 }
 
 type Issue struct {
-	Number       int
-	GlobalID     string
-	Title        string
-	Body         string
-	State        string // "open" | "closed"
-	Labels       []*Label
-	Comments     []*Comment
-	Seq          int
-	CreatedAt    string
-	UpdatedAt    string
-	jsonCache    string
-	jsonCacheHost string
-}
-
-type PullRequest struct {
 	Number        int
 	GlobalID      string
 	Title         string
 	Body          string
 	State         string // "open" | "closed"
-	Head          string
-	Base          string
-	HeadSHA       string
-	BaseSHA       string
-	Merged        bool
-	MergedAt      string
-	MergeCommitSHA string
+	Labels        []*Label
+	Comments      []*Comment
 	Seq           int
 	CreatedAt     string
 	UpdatedAt     string
+	jsonCache     string
+	jsonCacheHost string
+}
+
+type PullRequest struct {
+	Number         int
+	GlobalID       string
+	Title          string
+	Body           string
+	State          string // "open" | "closed"
+	Head           string
+	Base           string
+	HeadSHA        string
+	BaseSHA        string
+	Merged         bool
+	MergedAt       string
+	MergeCommitSHA string
+	Seq            int
+	CreatedAt      string
+	UpdatedAt      string
 }
 
 type Repo struct {
@@ -774,7 +774,7 @@ func (s *Store) readPack(pack []byte) ([]packEntry, error) {
 type packError struct{ msg string }
 
 func (e *packError) Error() string { return e.msg }
-func errPack(msg string) error    { return &packError{msg} }
+func errPack(msg string) error     { return &packError{msg} }
 
 // commitFile commits one file on a branch.
 func (s *Store) commitFile(repo *Repo, branch, path string, content []byte, message string) (commitSHA, contentSHA string) {

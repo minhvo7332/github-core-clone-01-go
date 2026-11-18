@@ -1,14 +1,15 @@
 // The HTTP server: routing, auth, body reading. One process, one store.
 //
 // Routes:
-//   GET  /healthz                       200 {ok:true} (no auth)
-//   POST /mcp                          MCP over streamable HTTP
-//   POST /api/graphql                  GraphQL v4
-//   /api/v3/*                          REST v3 (see rest.go)
-//   /{owner}/{repo}.git/info/refs      git smart-HTTP advertisements
-//   /{owner}/{repo}.git/git-upload-pack
-//   /{owner}/{repo}.git/git-receive-pack
-//   anything else                      404 {"message":"Not Found"}
+//
+//	GET  /healthz                       200 {ok:true} (no auth)
+//	POST /mcp                          MCP over streamable HTTP
+//	POST /api/graphql                  GraphQL v4
+//	/api/v3/*                          REST v3 (see rest.go)
+//	/{owner}/{repo}.git/info/refs      git smart-HTTP advertisements
+//	/{owner}/{repo}.git/git-upload-pack
+//	/{owner}/{repo}.git/git-receive-pack
+//	anything else                      404 {"message":"Not Found"}
 //
 // Auth: every surface but /healthz requires a non-empty Bearer token and
 // answers 401 {"message": ...} without one. The token is opaque; the viewer

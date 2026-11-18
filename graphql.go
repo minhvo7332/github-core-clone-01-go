@@ -128,9 +128,9 @@ type gqlVarDef struct {
 }
 
 type gqlOperation struct {
-	typ       string // "query" | "mutation"
-	name      string
-	variables []gqlVarDef
+	typ        string // "query" | "mutation"
+	name       string
+	variables  []gqlVarDef
 	selections []*gqlSelection
 }
 

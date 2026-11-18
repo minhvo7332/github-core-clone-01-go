@@ -29,15 +29,15 @@ const mcpServerName = "github-core-clone"
 const mcpServerVersion = "1.0.0"
 
 type mcpToolDef struct {
-	Name        string                       `json:"name"`
-	Description string                       `json:"description"`
-	InputSchema mcpInputSchema               `json:"inputSchema"`
+	Name        string         `json:"name"`
+	Description string         `json:"description"`
+	InputSchema mcpInputSchema `json:"inputSchema"`
 }
 
 type mcpInputSchema struct {
-	Type       string                         `json:"type"`
-	Properties map[string]mcpProp            `json:"properties"`
-	Required   []string                       `json:"required"`
+	Type       string             `json:"type"`
+	Properties map[string]mcpProp `json:"properties"`
+	Required   []string           `json:"required"`
 }
 
 type mcpProp struct {
@@ -89,7 +89,7 @@ func toolResult(data any) map[string]any {
 		text = string(b)
 	}
 	return map[string]any{
-		"content":          []any{map[string]string{"type": "text", "text": text}},
+		"content":           []any{map[string]string{"type": "text", "text": text}},
 		"structuredContent": data,
 	}
 }
